@@ -3,7 +3,8 @@
 // browser loads offline (game/index.html and its ES modules, no library
 // and no network request). This program copies game/ and screenshots/
 // from beside this file to /output and writes /output/dossier.json, the
-// summary the judge reads, with the vendored make.fun library.
+// summary the judge reads, with the vendored make.fun library. The first
+// screenshot by name (1-play.png) is the cover the judge sees largest.
 //
 // Serve it locally with `node serve.ts`, then open http://localhost:8080.
 // Outside the grader's container, MAKEFUN_OUTPUT_DIR stands in for /output:
