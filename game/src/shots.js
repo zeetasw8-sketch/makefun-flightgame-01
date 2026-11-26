@@ -18,10 +18,10 @@ export function stageShot(name, world) {
   }
   if (name === 'play') {
     world.reset();
-    // Fly the plane forward in a gentle bank toward the first ring so
-    // the frame shows terrain, the lit instruments and a ring ahead.
-    for (let i = 0; i < 60 * 10; i++) {
-      world.step(1 / 60, 0.08, 0.18, 0.4);
+    // Climb straight out to the north, toward the volcano, so the frame
+    // shows the island, the lit instruments and a ring ahead.
+    for (let i = 0; i < 60 * 6; i++) {
+      world.step(1 / 60, 0.06, 0, 0.3);
       if (st.crashed || st.won) break;
     }
     st.throttle = 0.7;
