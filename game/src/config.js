@@ -42,6 +42,10 @@ export const RING_COUNT = 8;
 export const RING_RADIUS = 26;
 export const RING_POINTS = 100;
 export const LANDING_POINTS = 150;
+export const LOW_PASS_POINTS = 50;
+export const LOW_PASS_MAX_AGL = 30;
+export const TIME_BONUS_MAX = 300;
+export const TIME_BONUS_RATE = 2;
 
 export const CRASH_CLEARANCE = 4;
 export const LANDING_MAX_SPEED = 42;

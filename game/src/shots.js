@@ -18,24 +18,40 @@ export function stageShot(name, world) {
   }
   if (name === 'play') {
     world.reset();
-    // Climb straight out to the north, toward the volcano, so the frame
-    // shows the island, the lit instruments and a ring ahead.
-    for (let i = 0; i < 60 * 6; i++) {
-      world.step(1 / 60, 0.06, 0, 0.3);
+    // Put the plane on a run at the first ring so the frame shows the
+    // aircraft, the lit instruments and the orange hoop dead ahead.
+    const ring = world.nextRing();
+    if (ring) {
+      const dx = ring.x - st.x;
+      const dz = ring.z - st.z;
+      const dist = Math.hypot(dx, dz);
+      // Heading 0 is north (-z): the bearing to the ring.
+      st.heading = Math.atan2(dx, -dz);
+      // Stand off 170 m from the ring, at its height, then fly in.
+      const back = 170 / Math.max(dist, 1);
+      st.x = ring.x - dx * back;
+      st.z = ring.z - dz * back;
+      st.y = ring.y;
+      st.speed = 85;
+      st.throttle = 0.85;
+    }
+    for (let i = 0; i < 60 * 2; i++) {
+      world.step(1 / 60, 0, 0, 0);
       if (st.crashed || st.won) break;
     }
-    st.throttle = 0.7;
+    st.throttle = 0.85;
     return { screen: SCREEN_PLAY, best: 0 };
   }
   // end
   world.reset();
   for (const ring of st.rings) ring.taken = true;
   st.ringsTaken = st.rings.length;
-  st.score = st.rings.length * 100 + 150;
-  st.landings = 1;
   st.time = 214;
+  st.timeBonus = Math.max(0, 300 - Math.round(st.time * 2));
+  st.score = st.rings.length * 100 + 150 + st.timeBonus;
+  st.landings = 1;
   st.won = true;
-  st.message = `All ${st.rings.length} rings! Mission complete.`;
+  st.message = `All ${st.rings.length} rings! Mission complete. +${st.timeBonus} time bonus.`;
   st.messageAt = st.time;
   st.y = 260;
   return { screen: SCREEN_WIN, best: st.score };

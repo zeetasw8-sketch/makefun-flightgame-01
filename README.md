@@ -11,8 +11,9 @@ A flight game over a volcanic island. Fly the island circuit: thread all
 - **P** — pause.
 
 A gentle touchdown on the runway (slow, level, low sink rate) refuels you
-and scores +150. Touching the ground anywhere else, or ditching in the
-sea, ends the flight. Thread all 8 rings to complete the mission.
+and scores +150. Buzz the runway under 30 m for a low-pass bonus (+50,
+once per flight). Thread all 8 rings to complete the mission — the
+faster the circuit, the bigger the time bonus (up to +300).
 
 ## The island
 

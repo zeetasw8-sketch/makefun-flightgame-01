@@ -11,6 +11,7 @@ import {
   TURN_RATE, PITCH_RATE, ROLL_RATE, ROLL_DAMP, PITCH_DAMP,
   MAX_PITCH, MAX_ROLL, FUEL_MAX, FUEL_BURN, FUEL_BURN_THROTTLE, FUEL_LOW,
   RING_COUNT, RING_RADIUS, RING_POINTS, LANDING_POINTS,
+  LOW_PASS_POINTS, LOW_PASS_MAX_AGL, TIME_BONUS_MAX, TIME_BONUS_RATE,
   CRASH_CLEARANCE, LANDING_MAX_SPEED, LANDING_MAX_SINK, STEP,
 } from './config.js';
 
@@ -20,6 +21,7 @@ export const EVENT_LAND = 2;
 export const EVENT_CRASH = 4;
 export const EVENT_FUEL = 8;
 export const EVENT_WIN = 16;
+export const EVENT_LOW_PASS = 32;
 
 const TAU = Math.PI * 2;
 
@@ -114,6 +116,8 @@ export function createWorld(random) {
     messageAt: 0,
     time: 0,
     landings: 0,
+    lowPassDone: false,
+    timeBonus: 0,
   };
 
   function reset() {
@@ -136,6 +140,8 @@ export function createWorld(random) {
     state.messageAt = 0;
     state.time = 0;
     state.landings = 0;
+    state.lowPassDone = false;
+    state.timeBonus = 0;
     for (const ring of rings) ring.taken = false;
   }
 
@@ -204,6 +210,22 @@ export function createWorld(random) {
       }
     }
 
+    // Low pass: buzz the runway under 30 m above the ground and it
+    // pays once per flight — a reward for flying low and steady.
+    const agl = state.y - groundHeight(state.x, state.z);
+    if (
+      !state.lowPassDone &&
+      onRunway(state.x, state.z) &&
+      agl < LOW_PASS_MAX_AGL &&
+      agl > CRASH_CLEARANCE &&
+      state.speed > 40
+    ) {
+      state.lowPassDone = true;
+      state.score += LOW_PASS_POINTS;
+      events |= EVENT_LOW_PASS;
+      say(`Low pass over the runway! +${LOW_PASS_POINTS}`);
+    }
+
     // Rings: fly through the hoop and it counts.
     const ring = nextRing();
     if (ring) {
@@ -216,7 +238,10 @@ export function createWorld(random) {
         if (state.ringsTaken >= RING_COUNT) {
           state.won = true;
           events |= EVENT_WIN;
-          say(`All ${RING_COUNT} rings! Mission complete.`);
+          // A time bonus: the faster the circuit, the more it pays.
+          state.timeBonus = Math.max(0, Math.round(TIME_BONUS_MAX - state.time * TIME_BONUS_RATE));
+          state.score += state.timeBonus;
+          say(`All ${RING_COUNT} rings! Mission complete. +${state.timeBonus} time bonus.`);
         } else {
           say(`Ring ${state.ringsTaken} of ${RING_COUNT}! +${RING_POINTS}`);
         }

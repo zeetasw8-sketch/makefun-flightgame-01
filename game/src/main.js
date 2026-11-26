@@ -5,7 +5,7 @@
 // one scene for a screenshot instead of running the loop.
 import { STEP, BEST_KEY } from './config.js';
 import { createRandom } from './random.js';
-import { createWorld, EVENT_CRASH, EVENT_WIN, EVENT_RING, EVENT_LAND, EVENT_FUEL } from './world.js';
+import { createWorld, EVENT_CRASH, EVENT_WIN, EVENT_RING, EVENT_LAND, EVENT_FUEL, EVENT_LOW_PASS } from './world.js';
 import { ACTION_CONFIRM, ACTION_PAUSE, createInput } from './input.js';
 import { createRenderer, SCREEN_OVER, SCREEN_PAUSED, SCREEN_PLAY, SCREEN_TITLE, SCREEN_WIN } from './render.js';
 import { stageShot } from './shots.js';
@@ -106,6 +106,7 @@ function runGame() {
     else if (events & EVENT_CRASH) endGame(false);
     else if (events & EVENT_RING) announce(world.state.message);
     else if (events & EVENT_LAND) announce(world.state.message);
+    else if (events & EVENT_LOW_PASS) announce(world.state.message);
     else if (events & EVENT_FUEL) announce(world.state.message);
   }
 

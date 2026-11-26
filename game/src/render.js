@@ -462,17 +462,21 @@ export function createRenderer(canvas) {
     ctx.textBaseline = 'alphabetic';
     // Top-left instrument block.
     ctx.fillStyle = 'rgba(8,18,28,0.62)';
-    roundRect(pad, pad, 208, 108, 10);
+    roundRect(pad, pad, 208, 138, 10);
     ctx.fill();
     ctx.fillStyle = '#fff';
     ctx.font = 'bold 13px sans-serif';
     ctx.fillText('ALTITUDE', pad + 12, pad + 22);
     ctx.fillText('SPEED', pad + 12, pad + 52);
     ctx.fillText('HEADING', pad + 12, pad + 82);
+    ctx.fillText('TIME', pad + 12, pad + 112);
     ctx.font = 'bold 20px monospace';
     ctx.fillText(`${altFt} ft`, pad + 104, pad + 24);
     ctx.fillText(`${spdKt} kt`, pad + 104, pad + 54);
     ctx.fillText(headingText(st), pad + 104, pad + 84);
+    const mins = Math.floor(st.time / 60);
+    const secs = Math.floor(st.time % 60);
+    ctx.fillText(`${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`, pad + 104, pad + 114);
     // Top-right: fuel, score, rings.
     const bw = 208;
     ctx.fillStyle = 'rgba(8,18,28,0.62)';
@@ -643,7 +647,7 @@ export function createRenderer(canvas) {
     } else if (screen === SCREEN_WIN) {
       overlay('MISSION COMPLETE', [
         `All ${RING_COUNT} rings flown · score ${st.score} · best ${best}`,
-        `Landings ${st.landings} · time ${Math.round(st.time)}s`,
+        `Time bonus +${st.timeBonus} · landings ${st.landings} · time ${Math.round(st.time)}s`,
         'A clean circuit. The island is yours.',
       ], '#7ee081');
     }
