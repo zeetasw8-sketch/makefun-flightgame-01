@@ -566,8 +566,9 @@ export function createRenderer(canvas) {
     ctx.moveTo(w / 2, h / 2 + 6);
     ctx.lineTo(w / 2, h / 2 + 16);
     ctx.stroke();
-    // A short-lived message, centred above the marker.
-    if (st.message && st.time - st.messageAt < 3.2) {
+    // A short-lived message, centred above the marker (play only, so it
+    // never overlaps the win or crash overlay).
+    if (screen === SCREEN_PLAY && st.message && st.time - st.messageAt < 3.2) {
       ctx.font = 'bold 20px sans-serif';
       ctx.textAlign = 'center';
       ctx.fillStyle = 'rgba(8,18,28,0.7)';

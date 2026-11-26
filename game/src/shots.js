@@ -18,10 +18,10 @@ export function stageShot(name, world) {
   }
   if (name === 'play') {
     world.reset();
-    // Fly the plane forward and bank it toward the first ring so the
-    // frame shows terrain, the lit instruments and a ring ahead.
-    for (let i = 0; i < 60 * 14; i++) {
-      world.step(1 / 60, 0.12, 0.35, 0.4);
+    // Fly the plane forward in a gentle bank toward the first ring so
+    // the frame shows terrain, the lit instruments and a ring ahead.
+    for (let i = 0; i < 60 * 10; i++) {
+      world.step(1 / 60, 0.08, 0.18, 0.4);
       if (st.crashed || st.won) break;
     }
     st.throttle = 0.7;
