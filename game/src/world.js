@@ -188,7 +188,7 @@ export function createWorld(random) {
     const sink = state.speed < STALL_SPEED ? (STALL_SPEED - state.speed) * 0.35 : 0;
     const vy = climb - sink;
     const vx = Math.sin(state.heading) * state.speed;
-    const vz = Math.cos(state.heading) * state.speed;
+    const vz = -Math.cos(state.heading) * state.speed;
     state.x += vx * dt;
     state.z += vz * dt;
     state.y += vy * dt;

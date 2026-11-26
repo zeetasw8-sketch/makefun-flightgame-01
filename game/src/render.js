@@ -90,7 +90,8 @@ export function createRenderer(canvas) {
     const cp = Math.cos(st.pitch);
     const sp = Math.sin(st.pitch);
     // Forward (aircraft nose direction, levelled for the camera).
-    const fwd = { x: sh * cp, y: sp, z: ch * cp };
+    // Heading 0 is north (-z), 90 degrees is east (+x).
+    const fwd = { x: sh * cp, y: sp, z: -ch * cp };
     // Camera sits behind the nose and above the tail.
     const back = 26;
     const up = 7;
@@ -369,12 +370,13 @@ export function createRenderer(canvas) {
     const cr = Math.cos(st.roll);
     const sr = Math.sin(st.roll);
     // Aircraft-frame axes in world space: forward, right, up.
-    const fwd = { x: sh * cp, y: sp, z: ch * cp };
-    const right0 = { x: ch, y: 0, z: -sh };
+    // Heading 0 is north (-z), 90 degrees is east (+x).
+    const fwd = { x: sh * cp, y: sp, z: -ch * cp };
+    const right0 = { x: ch, y: 0, z: sh };
     const up0 = {
       x: -sh * sp,
       y: cp,
-      z: -ch * sp,
+      z: ch * sp,
     };
     const right = {
       x: right0.x * cr + up0.x * sr,

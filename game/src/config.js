@@ -16,7 +16,7 @@ export const RUNWAY_WIDTH = 34;
 export const START_X = 0;
 export const START_Y = 150;
 export const START_Z = 1150;
-export const START_HEADING = Math.PI;
+export const START_HEADING = 0;
 export const START_SPEED = 55;
 
 export const MAX_SPEED = 95;
